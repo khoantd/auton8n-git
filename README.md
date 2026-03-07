@@ -1,73 +1,85 @@
-# Welcome to your Lovable project
+# Auton8n (Workflow Canvas)
 
-## Project info
+A curated **workflow automation marketplace** with a focus on **AI Agents** for [n8n](https://n8n.io/). Browse, purchase, and download workflow templates—including LLM-powered agents—and visualize them with the n8n-demo component.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Features
 
-## How can I edit this code?
+- **Workflow gallery** — Search and filter workflows by category (e.g. AI), view details, and download JSON templates for n8n
+- **N8N workflow visualization** — Interactive workflow graphs via `@n8n_io/n8n-demo-component` (see [N8N_WORKFLOW_INTEGRATION.md](N8N_WORKFLOW_INTEGRATION.md))
+- **Payments** — PayPal (Orders + Subscriptions) and manual QR flow; transactions and purchased workflows stored in Supabase
+- **Purchases & subscriptions** — Owned workflows, subscription plans, and post-checkout download (see [docs/post-checkout-download-spec.md](docs/post-checkout-download-spec.md))
+- **Admin** — Workflow management, carousel/slides, system settings, documents, activity logs
 
-There are several ways of editing your application.
+## Tech stack
 
-**Use Lovable**
+| Layer    | Stack |
+|----------|--------|
+| Frontend | Vite, React 18, TypeScript, shadcn/ui, TailwindCSS, React Query |
+| Database | Supabase (PostgreSQL); app tables in schema **`app`** |
+| Payments | PayPal Orders + Subscriptions API, webhook verification |
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Getting started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js (LTS)
+- Supabase project
+- (Optional) PayPal app for payments
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Install and run
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+```bash
+npm install
+# Create .env (and backend/.env if using backend) with required vars — see Environment variables below
+```
 
-Follow these steps:
+**Frontend only (Vite dev server):**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+**Backend only (Express on port 4000):**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+npm run dev:server
+```
 
-**Use GitHub Codespaces**
+**Frontend + backend together:**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+npm run dev:full
+```
 
-## What technologies are used for this project?
+### Environment variables
 
-This project is built with:
+**Frontend** (e.g. in `.env`, prefixed with `VITE_` for Vite):
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `VITE_SUPABASE_URL` — Supabase project URL  
+- `VITE_SUPABASE_ANON_KEY` — Supabase anon key  
+- `VITE_PAYPAL_CLIENT_ID` — PayPal client ID (optional, for PayPal UI)  
+- `VITE_API_BASE_URL` — Backend base URL (e.g. `http://localhost:4000`)
 
-## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+## Scripts
 
-## Can I connect a custom domain to my Lovable project?
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start Vite dev server |
+| `npm run dev:server` | Start Express backend (tsx watch) |
+| `npm run dev:full` | Run frontend and backend concurrently |
+| `npm run build` | Production Vite build |
+| `npm run preview` | Preview production build |
+| `npm run seed:workflow-demo` | Seed demo workflow data |
+| `npm run seed:workflows-remote` | Seed workflows from remote source |
+| `npm run seed:payment-methods-remote` | Seed payment methods from remote |
 
-Yes, you can!
+## Contributing
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Add or update workflow definitions in the data layer (e.g. workflows seeded via scripts or admin).
+2. For AI/agent workflows, use category **AI** and document integrations (OpenAI, webhooks, HTTP, etc.).
+3. Follow existing patterns for payments, Supabase schema `app`, and backend API.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+**License:** See repository license file.
