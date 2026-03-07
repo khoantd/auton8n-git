@@ -38,6 +38,8 @@ docs/
 memory/
 supabase/
 AGENTS.md
+BACKEND_IMAGE_BUILD.md
+N8N_WORKFLOW_INTEGRATION.md
 
 # Test / coverage
 coverage/
