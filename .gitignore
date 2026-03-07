@@ -36,6 +36,7 @@ Thumbs.db
 backend/
 docs/
 memory/
+supabase/
 AGENTS.md
 
 # Test / coverage
