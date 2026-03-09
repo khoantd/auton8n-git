@@ -8,7 +8,7 @@ import Payment from "./pages/Payment";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import Profile from "./pages/Profile";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Product from "./pages/Product";
 import Pricing from "./pages/Pricing";
@@ -17,12 +17,12 @@ import UseCases from "./pages/UseCases";
 import Purchases from "./pages/Purchases";
 import Admin from "./pages/Admin";
 import Feedback from "./pages/Feedback";
-import { CartProvider } from "./contexts/CartContext";
+import { CartProvider } from "@/contexts/CartContext";
 import { CartSheet } from "./components/CartSheet";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { paypalConfig } from "./config/paypal";
 
-import { SubscriptionProvider } from "./contexts/SubscriptionContext";
+import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 
 const queryClient = new QueryClient();
 

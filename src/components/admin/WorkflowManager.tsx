@@ -34,8 +34,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:4000";
+import { apiUrl } from "@/lib/api";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -70,7 +69,7 @@ export const WorkflowManager = () => {
     const fetchWorkflows = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/workflows`);
+            const response = await fetch(apiUrl("/api/admin/workflows"));
             if (!response.ok) {
                 let message = `HTTP ${response.status}`;
                 try {
@@ -114,7 +113,7 @@ export const WorkflowManager = () => {
             setIsDialogOpen(true);
             setDialogLoading(true);
             try {
-                const response = await fetch(`${API_BASE_URL}/api/admin/workflows/${workflow.id}`);
+                const response = await fetch(apiUrl(`/api/admin/workflows/${workflow.id}`));
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 const json = await response.json() as { workflow: any };
                 setFormData(prev => ({ ...prev, workflow_json: json.workflow.workflow_json || "" }));
@@ -167,7 +166,7 @@ export const WorkflowManager = () => {
 
         try {
             if (editingWorkflow) {
-                const response = await fetch(`${API_BASE_URL}/api/admin/workflows/${editingWorkflow.id}`, {
+                const response = await fetch(apiUrl(`/api/admin/workflows/${editingWorkflow.id}`), {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -196,7 +195,7 @@ export const WorkflowManager = () => {
 
                 toast({ title: "Workflow updated successfully" });
             } else {
-                const response = await fetch(`${API_BASE_URL}/api/admin/workflows`, {
+                const response = await fetch(apiUrl("/api/admin/workflows"), {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(body),
@@ -243,7 +242,7 @@ export const WorkflowManager = () => {
         if (!confirm(`Are you sure you want to delete "${title}"?`)) return;
 
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/workflows/${id}`, {
+            const response = await fetch(apiUrl(`/api/admin/workflows/${id}`), {
                 method: "DELETE",
             });
 
@@ -283,7 +282,7 @@ export const WorkflowManager = () => {
         if (!confirm("Sync workflows from khoantd/awesome-n8n-templates?\n\nExisting titles will be skipped. This may take a minute.")) return;
         setSyncing(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/workflows/sync-from-github`, {
+            const response = await fetch(apiUrl("/api/admin/workflows/sync-from-github"), {
                 method: "POST",
             });
             const json = await response.json() as { inserted?: number; skipped?: number; errors?: { path: string; message: string }[]; error?: string };

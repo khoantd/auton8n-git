@@ -3,8 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { MessageSquare, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+import { apiUrl } from "@/lib/api";
 
 interface FeedbackItem {
     id: string;
@@ -26,7 +25,7 @@ export const FeedbackManager = () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`${API_BASE}/api/admin/feedback`);
+            const res = await fetch(apiUrl("/api/admin/feedback"));
             if (!res.ok) throw new Error(`Server error: ${res.status}`);
             const data: FeedbackItem[] = await res.json();
             setItems(data);

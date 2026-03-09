@@ -22,8 +22,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { formatDistanceToNow, format } from "date-fns";
-
-const API = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
+import { apiUrl } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -233,11 +232,11 @@ export function SalesDashboard() {
         setError(null);
         try {
             const [statsRes, chartRes, sellersRes, customersRes, purchasesRes] = await Promise.all([
-                fetch(`${API}/api/admin/dashboard/stats?period=${period}`),
-                fetch(`${API}/api/admin/dashboard/revenue-chart?days=${chartDays}`),
-                fetch(`${API}/api/admin/dashboard/best-sellers?limit=8`),
-                fetch(`${API}/api/admin/dashboard/new-customers?limit=8&period=${period}`),
-                fetch(`${API}/api/admin/dashboard/recent-purchases?limit=10`),
+                fetch(apiUrl(`/api/admin/dashboard/stats?period=${period}`)),
+                fetch(apiUrl(`/api/admin/dashboard/revenue-chart?days=${chartDays}`)),
+                fetch(apiUrl("/api/admin/dashboard/best-sellers?limit=8")),
+                fetch(apiUrl(`/api/admin/dashboard/new-customers?limit=8&period=${period}`)),
+                fetch(apiUrl("/api/admin/dashboard/recent-purchases?limit=10")),
             ]);
 
             const [statsData, chartData, sellersData, customersData, purchasesData] =

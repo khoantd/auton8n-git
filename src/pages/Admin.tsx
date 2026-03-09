@@ -14,8 +14,7 @@ import { FeedbackManager } from "@/components/admin/FeedbackManager";
 import { CarouselManager } from "@/components/admin/CarouselManager";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
-
-const API = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:4000";
+import { apiUrl } from "@/lib/api";
 
 interface DashboardCounts {
     workflows: number;
@@ -52,7 +51,7 @@ const Admin = () => {
                     `)
                     .order("created_at", { ascending: false })
                     .limit(10),
-                fetch(`${API}/api/admin/dashboard/counts`),
+                fetch(apiUrl("/api/admin/dashboard/counts")),
             ]);
 
             if (error) throw error;

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { QrCode, Check, X, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
+import { apiUrl } from "@/lib/api";
 
 interface QrTransaction {
   id: string;
@@ -19,11 +20,6 @@ interface QrTransaction {
   user: { full_name: string | null; email: string | null };
 }
 
-const apiBase = (): string => {
-  const base = import.meta.env.VITE_API_BASE_URL || "";
-  return base ? base.replace(/\/$/, "") : "";
-};
-
 export function QrApprovalsList() {
   const { toast } = useToast();
   const [transactions, setTransactions] = useState<QrTransaction[]>([]);
@@ -33,7 +29,7 @@ export function QrApprovalsList() {
   const fetchPending = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${apiBase()}/api/admin/transactions/pending`);
+      const res = await fetch(apiUrl("/api/admin/transactions/pending"));
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
       setTransactions(data.transactions ?? []);
@@ -52,7 +48,7 @@ export function QrApprovalsList() {
   const handleApprove = async (id: string) => {
     setActioningId(id);
     try {
-      const res = await fetch(`${apiBase()}/api/admin/transactions/${id}/approve`, { method: "POST" });
+      const res = await fetch(apiUrl(`/api/admin/transactions/${id}/approve`), { method: "POST" });
       if (!res.ok) throw new Error(await res.text());
       toast({ title: "Transaction approved", description: "Fulfillment and notification sent." });
       await fetchPending();
@@ -66,7 +62,7 @@ export function QrApprovalsList() {
   const handleReject = async (id: string) => {
     setActioningId(id);
     try {
-      const res = await fetch(`${apiBase()}/api/admin/transactions/${id}/reject`, { method: "POST" });
+      const res = await fetch(apiUrl(`/api/admin/transactions/${id}/reject`), { method: "POST" });
       if (!res.ok) throw new Error(await res.text());
       toast({ title: "Transaction rejected" });
       await fetchPending();

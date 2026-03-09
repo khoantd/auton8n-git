@@ -18,6 +18,7 @@ import { useSubscription } from "@/contexts/SubscriptionContext";
 import { PayPalCheckout } from "@/components/payments/PayPalCheckout";
 import type { CartItem } from "@/contexts/CartContext";
 import { fetchSubscriptionsEnabled } from "@/utils/systemSettings";
+import { apiUrl } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Payment method helpers (mirrors logic in PaymentMethodsManager)
@@ -334,10 +335,7 @@ const Payment = () => {
 
       // Fire-and-forget notification email to sales
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
-        const url = apiBaseUrl
-          ? `${apiBaseUrl.replace(/\/$/, "")}/api/payment/notify`
-          : "/api/payment/notify";
+        const url = apiUrl("/api/payment/notify");
 
         const response = await fetch(url, {
           method: "POST",

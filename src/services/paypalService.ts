@@ -14,6 +14,7 @@
 
 import { paypalConfig } from "@/config/paypal";
 import type { CartItem } from "@/contexts/CartContext";
+import { apiUrl } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Request / response types
@@ -52,7 +53,7 @@ async function request<T>(
   body: unknown,
   signal?: AbortSignal
 ): Promise<T> {
-  const url = `${paypalConfig.apiBaseUrl}${path}`;
+  const url = apiUrl(path);
 
   const response = await fetch(url, {
     method: "POST",

@@ -9,8 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { MessageSquare } from "lucide-react";
-
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+import { apiUrl } from "@/lib/api";
 
 export default function Feedback() {
     const { user } = useAuth();
@@ -28,7 +27,7 @@ export default function Feedback() {
         setSubmitting(true);
 
         try {
-            const res = await fetch(`${API_BASE}/api/feedback`, {
+            const res = await fetch(apiUrl("/api/feedback"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

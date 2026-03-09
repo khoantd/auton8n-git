@@ -21,8 +21,7 @@ import {
 import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
-
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:4000";
+import { apiUrl } from "@/lib/api";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -157,7 +156,7 @@ export const PaymentMethodsManager = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/payment-methods`);
+            const response = await fetch(apiUrl("/api/admin/payment-methods"));
             if (!response.ok) {
                 let message = `HTTP ${response.status}`;
                 try {
@@ -212,7 +211,7 @@ export const PaymentMethodsManager = () => {
         const newStatus = !method.is_enabled;
         setMethods((prev) => prev.map((m) => (m.id === method.id ? { ...m, is_enabled: newStatus } : m)));
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/payment-methods/${method.id}/status`, {
+            const response = await fetch(apiUrl(`/api/admin/payment-methods/${method.id}/status`), {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ is_enabled: newStatus }),
@@ -242,7 +241,7 @@ export const PaymentMethodsManager = () => {
         const config = { ...defaultConfigFor(type), ...(gatewayConfigs[key] || {}) };
         setSavingConfigFor(method.id);
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/payment-methods/${method.id}/config`, {
+            const response = await fetch(apiUrl(`/api/admin/payment-methods/${method.id}/config`), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ config }),
@@ -273,7 +272,7 @@ export const PaymentMethodsManager = () => {
             return;
         }
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/payment-methods`, {
+            const response = await fetch(apiUrl("/api/admin/payment-methods"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -308,7 +307,7 @@ export const PaymentMethodsManager = () => {
             return;
         }
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/payment-methods/${editingMethod.id}`, {
+            const response = await fetch(apiUrl(`/api/admin/payment-methods/${editingMethod.id}`), {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -340,7 +339,7 @@ export const PaymentMethodsManager = () => {
     const handleDeleteMethod = async (id: string) => {
         const method = methods.find((m) => m.id === id);
         try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/payment-methods/${id}`, {
+            const response = await fetch(apiUrl(`/api/admin/payment-methods/${id}`), {
                 method: "DELETE",
             });
 

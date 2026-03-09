@@ -14,8 +14,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL as string | undefined) ?? "http://localhost:4000";
+import { apiUrl } from "@/lib/api";
 
 const UUID_REGEX =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -60,7 +59,7 @@ export const UserDataManager = () => {
 
         setDeleting(true);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/admin/users/delete`, {
+            const res = await fetch(apiUrl("/api/admin/users/delete"), {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

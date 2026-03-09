@@ -18,7 +18,7 @@ import { WorkflowPagination } from "@/components/WorkflowPagination";
 import { usePagination } from "@/hooks/usePagination";
 import { useFavorites } from "@/hooks/useFavorites";
 import { Heart, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { apiUrl } from "@/lib/api";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -39,14 +39,15 @@ const Index = () => {
     const fetchWorkflows = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from("workflows")
-          .select("*")
-          .order("created_at", { ascending: false });
+        const response = await fetch(apiUrl("/api/admin/workflows"));
+        if (!response.ok) {
+          throw new Error(`Failed to fetch workflows: ${response.status}`);
+        }
 
-        if (error) throw error;
+        const payload = await response.json();
+        const rows = Array.isArray(payload?.workflows) ? payload.workflows : [];
 
-        const mappedWorkflows: Workflow[] = data.map((w: any) => ({
+        const mappedWorkflows: Workflow[] = rows.map((w: any) => ({
           id: w.id,
           title: w.title,
           description: w.description || "",
@@ -74,6 +75,7 @@ const Index = () => {
         setWorkflows(mappedWorkflows);
       } catch (error) {
         console.error("Error fetching workflows:", error);
+        setWorkflows([]);
       } finally {
         setLoading(false);
       }
@@ -83,26 +85,10 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const fetchCarouselSlides = async () => {
-      setCarouselLoaded(false);
-      setCarouselError(false);
-      try {
-        const { data, error } = await supabase
-          .from("carousel_slides")
-          .select("*")
-          .order("sort_order", { ascending: true });
-
-        if (error) throw error;
-        setCarouselRows((data as CarouselSlideRow[]) ?? []);
-      } catch {
-        setCarouselError(true);
-        setCarouselRows([]);
-      } finally {
-        setCarouselLoaded(true);
-      }
-    };
-
-    fetchCarouselSlides();
+    // Carousel API is not exposed by backend yet, so use local fallback slides.
+    setCarouselLoaded(true);
+    setCarouselError(false);
+    setCarouselRows([]);
   }, []);
 
   const categories = useMemo(() => {
